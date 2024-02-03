@@ -2,6 +2,8 @@ require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const internal = require('node:stream');
+const { log } = require('node:console');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
 
@@ -45,6 +47,36 @@ client.on(Events.InteractionCreate, async interaction => {
 		} else {
 			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		}
+	}
+});
+
+client.on('interactionCreate', async (interaction) => {
+	try {
+		if(!interaction.isButton()) return;
+
+		await interaction.deferReply({ ephemeral: true });
+
+		const role = interaction.guild.roles.cache.get(interaction.customId);
+		if(!role) {
+			interaction.editReply({
+				content: `I could't find this button`,
+			});
+
+			return;
+		}
+		
+		const hasRole = interaction.member.roles.cache.has(role.id);
+
+		if(hasRole) {
+			await interaction.member.roles.remove(role);
+			await interaction.editReply(`The role ${role} has been remove`);
+			return;
+		};
+
+		await interaction.member.roles.add(role)
+		await interaction.editReply(`The role ${role} has been added`);
+	} catch (error) {
+		console.log(error);
 	}
 });
 
