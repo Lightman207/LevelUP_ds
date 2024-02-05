@@ -27,6 +27,10 @@ for (const folder of commandFolders) {
 
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+
+	client.user.setActivity({
+		name: 'LevelUP waiting you 🔥'
+	});
 });
 
 client.on(Events.InteractionCreate, async interaction => {
