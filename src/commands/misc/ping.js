@@ -7,7 +7,7 @@ module.exports = {
     // textOnly: Boolean,
     // options: Object[],
     
-    callback: (client, interaction) => {
-        interaction.reply(`Pong ${client.ws.ping}mss`)
-    }
-};
+    callback: async (client, interaction) => {
+        await interaction.deferReply();
+
+        const re

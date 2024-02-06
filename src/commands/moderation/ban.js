@@ -1,27 +1,26 @@
-const { ApplicationCommandOptionType, Client, ApplicationCommand, PermissionFlagsBits } = require("discord.js");
+const { ApplicationCommandOptionType, Client, Integration, ApplicationCommand, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
-    name: 'ban',
-    description: 'Bans a member!!!',
-    // devOnly: Boolean,
-    // textOnly: Boolean,
-    options: [
-        {
-            name: 'target-user',
-            description: 'The user you want to ban',
-            require: true,
-            type: ApplicationCommandOptionType.Mentionable,
-        },
-        {
-            name: 'reason',
-            description: 'The reason for banning',
-            type: ApplicationCommandOptionType.String,
-        },
-    ],
-    permissionsRequired: [PermissionFlagsBits.Administrator],
-    botPermissionsRequired: [PermissionFlagsBits.Administrator],
-    
-    callback: (client, interaction) => {
-        interaction.reply(`Ban...`)
+  /**
+   *
+   * @param {Client} client
+   * @param {Interaction} interaction
+   */
+
+  callback: async (client, interaction) => {
+    const targetUserId = interaction.options.get('target-user').value;
+    const reason =
+      interaction.options.get('reason')?.value || 'No reason provided';
+
+    await interaction.deferReply();
+
+    const targetUser = await interaction.guild.members.fetch(targetUserId);
+
+    if (!targetUser) {
+      await interaction.editReply("That user doesn't exist in this server.");
+      return;
     }
-};
+
+    if (targetUser.id === interaction.guild.ownerId) {
+      await interaction.editReply(
+        "You can't ban that user because they're the server ow
