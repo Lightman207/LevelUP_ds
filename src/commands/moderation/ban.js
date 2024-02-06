@@ -1,4 +1,4 @@
-const { ApplicationCommandOptionType, Client, ApplicationCommand, PermissionFlagsBits } = require("discord.js");
+const { ApplicationCommandOptionType, Client, Interaction, ApplicationCommand, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
   /**
@@ -6,11 +6,9 @@ module.exports = {
    * @param {Client} client
    * @param {Interaction} interaction
    */
-
   callback: async (client, interaction) => {
     const targetUserId = interaction.options.get('target-user').value;
-    const reason =
-      interaction.options.get('reason')?.value || 'No reason provided';
+    const reason = interaction.options.get('reason')?.value || 'No reason provided';
 
     await interaction.deferReply();
 
@@ -63,7 +61,7 @@ module.exports = {
     {
       name: 'target-user',
       description: 'The user you want to ban.',
-      type: ApplicationCommandOptionType.Mentionable,
+      type: ApplicationCommandOptionType.User,
       required: true,
     },
     {

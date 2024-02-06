@@ -63,7 +63,7 @@ module.exports = {
       {
         name: 'target-user',
         description: 'The user you want to kick.',
-        type: ApplicationCommandOptionType.Mentionable,
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
