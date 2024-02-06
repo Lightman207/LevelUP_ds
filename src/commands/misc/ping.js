@@ -3,6 +3,7 @@ const { Client } = require("discord.js");
 module.exports = {
     name: 'ping',
     description: 'Pong!',
+    // deleted: Boolean,
     // devOnly: Boolean,
     // textOnly: Boolean,
     // options: Object[],
@@ -10,4 +11,10 @@ module.exports = {
     callback: async (client, interaction) => {
         await interaction.deferReply();
 
-        const re
+        const reply = await interaction.fetchReply();
+
+        const ping = reply.createdTimestamp - interaction.createdTimestamp;
+
+        interaction.editReply(`Pong! Client ${ping}ms | Websocket: ${client.ws.ping}ms`);
+    }
+};
