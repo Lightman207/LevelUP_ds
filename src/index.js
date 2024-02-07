@@ -1,28 +1,29 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits } = require('discord.js');
-const eventHandlers = require('./handlers/eventHandlers');
+const { Client, IntentsBitField } = require('discord.js');
+// const { Font, RankCardBuilder } = require('canvacord');
 const mongoose = require('mongoose');
+const eventHandler = require('./handlers/eventHandler');
+const client = new Client({
+  intents: [
+    IntentsBitField.Flags.Guilds,
+    IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildPresences,
+    IntentsBitField.Flags.MessageContent,
+  ],
+});
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent] });
+(async () => {
+  try {
+    mongoose.set('strictQuery', false);
+    await mongoose.connect(process.env.MONGODB_URL);
+    console.log('Connected to DB.');
 
-(async() => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URL || '', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        
-        if (mongoose.connect) {
-            console.log('I have connected to the database!');
-        } else {
-            console.log('I cannot connect to the database right now...');
-        }
+    eventHandler(client);
 
-        eventHandlers(client);
-    } catch (error) {
-        console.log(error);
-    }
+    client.login(process.env.TOKEN);
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
 })();
 // node --trace-warnings ...
-
-client.login(process.env.TOKEN);
