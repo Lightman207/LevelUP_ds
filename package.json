@@ -12,7 +12,7 @@
   "dependencies": {
     "canvacord": "^5.4.8",
     "discord-player": "^6.6.7",
-    "discord.js": "^14.7.1",
+    "discord.js": "^14.14.1",
     "dotenv": "^16.4.0",
     "mongoose": "^8.1.1",
     "ms": "^2.1.3",
