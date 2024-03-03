@@ -40,9 +40,12 @@ module.exports = async (client, message) => {
               console.log(`Error saving updated level ${e}`);
               return;
           });
+          cooldowns.add(message.author.id);
+          setTimeout(() => {
+            cooldowns.delete(message.author.id)
+          }, 30000);
       }
 
-      // if (!level)
       else {
           console.log(`Else: ${level}`);
         // create new level
