@@ -1,16 +1,18 @@
+'use strict'
 require('dotenv').config();
-const { Client, IntentsBitField } = require('discord.js');
-// const { Font, RankCardBuilder } = require('canvacord');
-const mongoose = require('mongoose');
-const eventHandler = require('./handlers/eventHandler');
+const { Client, IntentsBitField } = require('discord.js'),
+	mongoose = require('mongoose'),
+	eventHandler = require('./handlers/eventHandler')
+
+
 const client = new Client({
-  intents: [
-    IntentsBitField.Flags.Guilds,
-    IntentsBitField.Flags.GuildMembers,
-    IntentsBitField.Flags.GuildMessages,
-    IntentsBitField.Flags.GuildPresences,
-    IntentsBitField.Flags.MessageContent,
-  ],
+	intents: [
+		IntentsBitField.Flags.Guilds,
+		IntentsBitField.Flags.GuildMembers,
+		IntentsBitField.Flags.GuildMessages,
+		IntentsBitField.Flags.GuildPresences,
+		IntentsBitField.Flags.MessageContent,
+	],
 });
 
 (async () => {
@@ -29,12 +31,12 @@ const client = new Client({
 
 client.on('interactionCreate', async (interaction) => {
 	try {
-		if(!interaction.isButton()) return;
+		if (!interaction.isButton()) return;
 
 		await interaction.deferReply({ ephemeral: true });
 
 		const role = interaction.guild.roles.cache.get(interaction.customId);
-		if(!role) {
+		if (!role) {
 			interaction.editReply({
 				content: `I could't find this button`,
 			});
@@ -44,7 +46,7 @@ client.on('interactionCreate', async (interaction) => {
 
 		const hasRole = interaction.member.roles.cache.has(role.id);
 
-		if(hasRole) {
+		if (hasRole) {
 			await interaction.member.roles.remove(role);
 			await interaction.editReply(`The role ${role} has been remove`);
 			return;
